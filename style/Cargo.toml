@@ -20,6 +20,9 @@ doctest = false
 
 [features]
 default = ["servo"]
+# Opt-in for embedders that resolve SVG filter references themselves: servo builds parse and compute
+# `filter: url(...)` instead of rejecting it. Off by default; Servo is unaffected.
+ahcut = []
 gecko = [
     "bindgen",
     "malloc_size_of/gecko",
