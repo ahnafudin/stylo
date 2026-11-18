@@ -7,7 +7,7 @@
 use crate::Zero;
 use crate::derives::*;
 use crate::parser::{Parse, ParserContext};
-#[cfg(feature = "servo")]
+#[cfg(all(feature = "servo", not(feature = "ahcut")))]
 use crate::values::Impossible;
 use crate::values::computed::Angle as ComputedAngle;
 use crate::values::computed::CSSPixelLength as ComputedCSSPixelLength;
@@ -19,7 +19,7 @@ use crate::values::computed::NumberOrPercentage as ComputedNumberOrPercentage;
 use crate::values::computed::ZeroToOneNumber as ComputedZeroToOneNumber;
 use crate::values::computed::effects::BoxShadow as ComputedBoxShadow;
 use crate::values::computed::effects::SimpleShadow as ComputedSimpleShadow;
-#[cfg(feature = "gecko")]
+#[cfg(any(feature = "gecko", feature = "ahcut"))]
 use crate::values::computed::url::ComputedUrl;
 use crate::values::computed::{Context, ToComputedValue};
 use crate::values::generics::effects::BoxShadow as GenericBoxShadow;
@@ -28,7 +28,7 @@ use crate::values::generics::effects::SimpleShadow as GenericSimpleShadow;
 use crate::values::generics::{NonNegative, ZeroToOne};
 use crate::values::specified::color::Color;
 use crate::values::specified::length::{Length, NonNegativeLength};
-#[cfg(feature = "gecko")]
+#[cfg(any(feature = "gecko", feature = "ahcut"))]
 use crate::values::specified::url::SpecifiedUrl;
 use crate::values::specified::{Angle, NonNegativeNumberOrPercentage, Number, NumberOrPercentage};
 use cssparser::{Parser, match_ignore_ascii_case};
@@ -39,11 +39,11 @@ pub type BoxShadow =
     GenericBoxShadow<Option<Color>, Length, Option<NonNegativeLength>, Option<Length>>;
 
 /// A specified value for a single `filter`.
-#[cfg(feature = "gecko")]
+#[cfg(any(feature = "gecko", feature = "ahcut"))]
 pub type SpecifiedFilter = GenericFilter<Angle, FilterFactor, Length, SimpleShadow, SpecifiedUrl>;
 
 /// A specified value for a single `filter`.
-#[cfg(feature = "servo")]
+#[cfg(all(feature = "servo", not(feature = "ahcut")))]
 pub type SpecifiedFilter = GenericFilter<Angle, FilterFactor, Length, SimpleShadow, Impossible>;
 
 pub use self::SpecifiedFilter as Filter;
@@ -279,7 +279,15 @@ impl Filter {
             },
             #[cfg(feature = "gecko")]
             Filter::Url(ref url) => Ok(ComputedFilter::Url(ComputedUrl(url.clone()))),
-            #[cfg(feature = "servo")]
+            // Opt-in: a servo build resolves the URL for an embedder that applies SVG filters itself.
+            #[cfg(all(feature = "servo", feature = "ahcut"))]
+            Filter::Url(ref url) => url
+                .url()
+                .cloned()
+                .map(ComputedUrl::Valid)
+                .map(ComputedFilter::Url)
+                .ok_or(()),
+            #[cfg(all(feature = "servo", not(feature = "ahcut")))]
             Filter::Url(_) => Err(()),
         }
     }
@@ -288,7 +296,7 @@ impl Filter {
 impl Parse for Filter {
     #[inline]
     fn parse(context: &ParserContext, input: &mut Parser) -> Result<Self, ParseError> {
-        #[cfg(feature = "gecko")]
+        #[cfg(any(feature = "gecko", feature = "ahcut"))]
         {
             if let Ok(url) = input.try_parse(|i| SpecifiedUrl::parse(context, i)) {
                 return Ok(GenericFilter::Url(url));
@@ -456,4 +464,107 @@ pub enum Blend {
     Color,
     Luminosity,
     PlusLighter,
+}
+
+#[cfg(all(test, feature = "servo", feature = "ahcut"))]
+mod servo_filter_url_tests {
+    use super::*;
+    use crate::context::QuirksMode;
+    use crate::custom_properties::AttrTaint;
+    use crate::stylesheets::{Namespaces, Origin, UrlExtraData};
+    use crate::values::animated::{ToAnimatedValue, effects::AnimatedFilter};
+    use std::borrow::Cow;
+    use style_traits::ParsingMode;
+
+    fn parse_filter(css: &str, base: &str) -> Result<Filter, ParseError> {
+        let url_data = UrlExtraData::from(url::Url::parse(base).unwrap());
+        let context = ParserContext::new(
+            Origin::Author,
+            &url_data,
+            None,
+            ParsingMode::DEFAULT,
+            QuirksMode::NoQuirks,
+            Cow::Owned(Namespaces::default()),
+            None,
+            None,
+            AttrTaint::default(),
+        );
+        Parser::new(css).parse_entirely(|input| Filter::parse(&context, input))
+    }
+
+    #[test]
+    fn local_urls_use_real_css_decoding_and_computed_roundtrip() {
+        for css in ["url(#mb)", r##"url("#mb")"##, r"u\72l(#mb)"] {
+            let specified = parse_filter(css, "https://example.invalid/document.html").unwrap();
+            let computed = specified.to_computed_value_without_context().unwrap();
+            let ComputedFilter::Url(reference) = &computed else {
+                panic!("URL syntax lost at computation: {css}");
+            };
+            assert_eq!(
+                reference.url().unwrap().as_str(),
+                "https://example.invalid/document.html#mb"
+            );
+            assert_eq!(Filter::from_computed_value(&computed), specified);
+        }
+    }
+
+    #[test]
+    fn urls_retain_stylesheet_base_for_the_renderer_to_check() {
+        let computed = parse_filter("url(#mb)", "https://example.invalid/styles/linked.css")
+            .unwrap()
+            .to_computed_value_without_context()
+            .unwrap();
+        let ComputedFilter::Url(reference) = computed else {
+            panic!("URL did not survive computation");
+        };
+        // Lexing a CSS URL is not permission to fetch or paint an external filter.
+        // The unchanged Blitz provenance/local-document resolver must refuse it.
+        assert_eq!(
+            reference.url().unwrap().as_str(),
+            "https://example.invalid/styles/linked.css#mb"
+        );
+    }
+
+    #[test]
+    fn malformed_nested_and_trailing_tokens_are_not_urls() {
+        for css in [
+            "url(#mb trailing)",
+            "url(var(--filter))",
+            "url(\"#mb\") trailing",
+            "unknown(#mb)",
+            "url(\"bad\nstring\")",
+        ] {
+            assert!(
+                parse_filter(css, "https://example.invalid/document.html").is_err(),
+                "{css}"
+            );
+        }
+    }
+
+    #[test]
+    fn invalid_url_has_no_contextless_valid_reference() {
+        let specified = parse_filter("url(\"\")", "https://example.invalid/document.html").unwrap();
+        assert!(matches!(specified, Filter::Url(_)));
+        assert!(specified.to_computed_value_without_context().is_err());
+    }
+
+    #[test]
+    fn specified_computed_animated_aliases_share_the_real_url_type() {
+        fn specified_bridge<T: ToComputedValue<ComputedValue = ComputedFilter>>() {}
+        fn animated_bridge<T: ToAnimatedValue<AnimatedValue = AnimatedFilter>>() {}
+        specified_bridge::<Filter>();
+        animated_bridge::<ComputedFilter>();
+    }
+
+    #[test]
+    fn ordinary_blur_keeps_its_existing_computation() {
+        let computed = parse_filter("blur(12px)", "https://example.invalid/document.html")
+            .unwrap()
+            .to_computed_value_without_context()
+            .unwrap();
+        let ComputedFilter::Blur(radius) = computed else {
+            panic!("blur variant changed");
+        };
+        assert_eq!(radius.px(), 12.0);
+    }
 }
