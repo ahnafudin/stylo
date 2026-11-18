@@ -121,8 +121,7 @@ type = "XTextScale"
 initial = "computed::XTextScale::All"
 struct = "font"
 animation_type = "none"
-enabled_in = ""
-has_effect_on_gecko_scrollbars = false
+enabled_in = "ua"
 spec = "Internal (not web-exposed)"
 affects = "layout"
 
@@ -165,7 +164,7 @@ parse_method = "parse_block"
 spec = "https://drafts.csswg.org/css-align/#align-self-property"
 extra_prefixes = ["webkit"]
 animation_type = "discrete"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 affects = "layout"
 
 [alignment-baseline]
@@ -181,7 +180,7 @@ affects = "layout"
 type = "AnchorName"
 initial = "computed::AnchorName::none()"
 struct = "box"
-engine = "gecko"
+servo_pref = "layout.css.anchor-positioning.enabled"
 animation_type = "discrete"
 spec = "https://drafts.csswg.org/css-anchor-position-1/#propdef-anchor-name"
 affects = ""
@@ -190,7 +189,7 @@ affects = ""
 type = "ScopedName"
 initial = "computed::ScopedName::none()"
 struct = "box"
-engine = "gecko"
+servo_pref = "layout.css.anchor-positioning.enabled"
 animation_type = "discrete"
 spec = "https://drafts.csswg.org/css-anchor-position-1/#propdef-scope"
 affects = ""
@@ -203,7 +202,7 @@ vector = { need_index = true }
 animation_type = "none"
 extra_prefixes = ["moz:layout.css.prefixes.animations", "webkit"]
 spec = "https://drafts.csswg.org/css-animations/#propdef-animation-delay"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [animation-direction]
@@ -214,7 +213,7 @@ vector = { need_index = true }
 animation_type = "none"
 extra_prefixes = ["moz:layout.css.prefixes.animations", "webkit"]
 spec = "https://drafts.csswg.org/css-animations/#propdef-animation-direction"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [animation-duration]
@@ -235,7 +234,7 @@ vector = { need_index = true }
 animation_type = "none"
 extra_prefixes = ["moz:layout.css.prefixes.animations", "webkit"]
 spec = "https://drafts.csswg.org/css-animations/#propdef-animation-fill-mode"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [animation-iteration-count]
@@ -245,7 +244,7 @@ struct = "ui"
 vector = { need_index = true }
 animation_type = "none"
 extra_prefixes = ["moz:layout.css.prefixes.animations", "webkit"]
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 spec = "https://drafts.csswg.org/css-animations/#propdef-animation-iteration-count"
 affects = ""
 
@@ -256,7 +255,7 @@ struct = "ui"
 vector = { need_index = true }
 animation_type = "none"
 extra_prefixes = ["moz:layout.css.prefixes.animations", "webkit"]
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 spec = "https://drafts.csswg.org/css-animations/#propdef-animation-name"
 affects = ""
 
@@ -268,7 +267,7 @@ vector = { need_index = true }
 animation_type = "none"
 extra_prefixes = ["moz:layout.css.prefixes.animations", "webkit"]
 spec = "https://drafts.csswg.org/css-animations/#propdef-animation-play-state"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [animation-range-end]
@@ -280,7 +279,7 @@ animation_type = "none"
 gecko_pref = "layout.css.scroll-driven-animations.enabled"
 servo_pref = "layout.css.scroll-driven-animations.enabled"
 spec = "https://drafts.csswg.org/scroll-animations-1/#animation-range-end"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [animation-range-start]
@@ -292,7 +291,7 @@ animation_type = "none"
 gecko_pref = "layout.css.scroll-driven-animations.enabled"
 servo_pref = "layout.css.scroll-driven-animations.enabled"
 spec = "https://drafts.csswg.org/scroll-animations-1/#animation-range-start"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [animation-timeline]
@@ -304,7 +303,7 @@ animation_type = "none"
 gecko_pref = "layout.css.scroll-driven-animations.enabled"
 servo_pref = "layout.css.scroll-driven-animations.enabled"
 spec = "https://drafts.csswg.org/css-animations-2/#propdef-animation-timeline"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [animation-timing-function]
@@ -436,7 +435,7 @@ logical = true
 logical_group = "size"
 parse_method = "parse_size_for_width_or_height"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-block-size"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -455,7 +454,7 @@ struct = "position"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://www.w3.org/TR/CSS2/visuren.html#propdef-bottom"
 allow_quirks = true
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 gecko_ffi_name = "mOffset.2"
 servo_restyle_damage = "rebuild_box"
 logical_group = "inset"
@@ -730,7 +729,7 @@ affects = "layout"
 type = "CounterSet"
 initial = "Default::default()"
 struct = "counters"
-engine = "gecko"
+servo_pref = "layout.css.counters.enabled"
 animation_type = "discrete"
 spec = "https://drafts.csswg.org/css-lists-3/#propdef-counter-set"
 servo_restyle_damage = "rebuild_box"
@@ -1045,6 +1044,17 @@ animation_type = "discrete"
 spec = "https://drafts.csswg.org/css-grid/#propdef-grid-auto-flow"
 affects = "layout"
 
+[fit-tolerance]
+aliases = ["flow-tolerance:layout.css.display-grid-lanes.enabled"]
+type = "length::FitTolerance"
+initial = "computed::length::FitTolerance::normal()"
+struct = "box"
+gecko_pref = "layout.css.display-grid-lanes.enabled"
+servo_pref = "layout.css.display-grid-lanes.enabled"
+spec = "https://drafts.csswg.org/css-grid-3/#fit-tolerance"
+servo_restyle_damage = "rebuild_box"
+affects = "layout"
+
 [grid-auto-rows]
 type = "ImplicitGridTracks"
 initial = "Default::default()"
@@ -1116,7 +1126,7 @@ allow_quirks = true
 parse_method = "parse_size_for_width_or_height"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://drafts.csswg.org/css-box/#propdef-height"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -1147,7 +1157,7 @@ logical = true
 logical_group = "size"
 parse_method = "parse_size_for_width_or_height"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-inline-size"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -1156,7 +1166,7 @@ type = "Inset"
 initial = "computed::Inset::auto()"
 struct = "position"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-inset-block-end"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 logical = true
 logical_group = "inset"
 affects = "layout"
@@ -1166,7 +1176,7 @@ type = "Inset"
 initial = "computed::Inset::auto()"
 struct = "position"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-inset-block-start"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 logical = true
 logical_group = "inset"
 affects = "layout"
@@ -1176,7 +1186,7 @@ type = "Inset"
 initial = "computed::Inset::auto()"
 struct = "position"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-inset-inline-end"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 logical = true
 logical_group = "inset"
 affects = "layout"
@@ -1186,7 +1196,7 @@ type = "Inset"
 initial = "computed::Inset::auto()"
 struct = "position"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-inset-inline-start"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 logical = true
 logical_group = "inset"
 affects = "layout"
@@ -1217,7 +1227,7 @@ struct = "position"
 parse_method = "parse_inline"
 spec = "https://drafts.csswg.org/css-align/#justify-self-property"
 animation_type = "discrete"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 affects = "layout"
 
 [left]
@@ -1227,7 +1237,7 @@ struct = "position"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://www.w3.org/TR/CSS2/visuren.html#propdef-left"
 allow_quirks = true
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 gecko_ffi_name = "mOffset.3"
 servo_restyle_damage = "rebuild_box"
 logical_group = "inset"
@@ -1328,7 +1338,7 @@ struct = "position"
 logical = true
 logical_group = "max-size"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-block-size"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -1339,7 +1349,7 @@ struct = "position"
 logical_group = "max-size"
 allow_quirks = true
 spec = "https://drafts.csswg.org/css-box/#propdef-height"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -1350,7 +1360,7 @@ struct = "position"
 logical = true
 logical_group = "max-size"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-inline-size"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -1361,7 +1371,7 @@ struct = "position"
 logical_group = "max-size"
 allow_quirks = true
 spec = "https://drafts.csswg.org/css-box/#propdef-width"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -1372,7 +1382,7 @@ struct = "position"
 logical = true
 logical_group = "min-size"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-block-size"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -1383,7 +1393,7 @@ struct = "position"
 logical_group = "min-size"
 allow_quirks = true
 spec = "https://drafts.csswg.org/css-box/#propdef-height"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -1394,7 +1404,7 @@ struct = "position"
 logical = true
 logical_group = "min-size"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-inline-size"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -1405,7 +1415,7 @@ struct = "position"
 logical_group = "min-size"
 allow_quirks = true
 spec = "https://drafts.csswg.org/css-box/#propdef-width"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -1715,9 +1725,9 @@ affects = "layout"
 type = "PositionAnchor"
 initial = "computed::PositionAnchor::normal()"
 struct = "position"
-engine = "gecko"
+servo_pref = "layout.css.anchor-positioning.enabled"
 animation_type = "discrete"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 spec = "https://drafts.csswg.org/css-anchor-position-1/#propdef-position-anchor"
 affects = "layout"
 
@@ -1726,7 +1736,7 @@ type = "PositionArea"
 initial = "computed::PositionArea::none()"
 struct = "position"
 animation_type = "discrete"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_pref = "layout.css.anchor-positioning.enabled"
 spec = "https://drafts.csswg.org/css-anchor-position-1/#typedef-position-area"
 affects = "layout"
@@ -1744,7 +1754,7 @@ affects = "layout"
 type = "PositionTryOrder"
 initial = "computed::PositionTryOrder::normal()"
 struct = "position"
-engine = "gecko"
+servo_pref = "layout.css.anchor-positioning.enabled"
 animation_type = "discrete"
 spec = "https://drafts.csswg.org/css-anchor-position-1/#position-try-order-property"
 affects = "layout"
@@ -1753,7 +1763,7 @@ affects = "layout"
 type = "PositionVisibility"
 initial = "computed::PositionVisibility::ANCHORS_VISIBLE"
 struct = "position"
-engine = "gecko"
+servo_pref = "layout.css.anchor-positioning.enabled"
 animation_type = "discrete"
 spec = "https://drafts.csswg.org/css-anchor-position-1/#propdef-position-visibility"
 affects = "layout"
@@ -1794,7 +1804,7 @@ struct = "position"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://www.w3.org/TR/CSS2/visuren.html#propdef-right"
 allow_quirks = true
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 gecko_ffi_name = "mOffset.1"
 servo_restyle_damage = "rebuild_box"
 logical_group = "inset"
@@ -2079,7 +2089,7 @@ struct = "position"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://www.w3.org/TR/CSS2/visuren.html#propdef-top"
 allow_quirks = true
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 gecko_ffi_name = "mOffset.0"
 servo_restyle_damage = "rebuild_box"
 logical_group = "inset"
@@ -2267,7 +2277,7 @@ vector = { need_index = true }
 animation_type = "none"
 gecko_pref = "layout.css.scroll-driven-animations.enabled"
 spec = "https://drafts.csswg.org/scroll-animations-1/#scroll-timeline-axis"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [scroll-timeline-name]
@@ -2279,7 +2289,7 @@ vector = { need_index = true }
 animation_type = "none"
 gecko_pref = "layout.css.scroll-driven-animations.enabled"
 spec = "https://drafts.csswg.org/scroll-animations-1/#scroll-timeline-name"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [view-timeline-axis]
@@ -2291,7 +2301,7 @@ vector = { need_index = true }
 animation_type = "none"
 gecko_pref = "layout.css.scroll-driven-animations.enabled"
 spec = "https://drafts.csswg.org/scroll-animations-1/#view-timeline-axis"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [view-timeline-inset]
@@ -2303,7 +2313,7 @@ vector = { need_index = true }
 animation_type = "none"
 gecko_pref = "layout.css.scroll-driven-animations.enabled"
 spec = "https://drafts.csswg.org/scroll-animations-1/#view-timeline-axis"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [view-timeline-name]
@@ -2315,7 +2325,7 @@ vector = { need_index = true }
 animation_type = "none"
 gecko_pref = "layout.css.scroll-driven-animations.enabled"
 spec = "https://drafts.csswg.org/scroll-animations-1/#view-timeline-name"
-rule_types_allowed = ["style", "scope"]
+rule_types_allowed = ["style"]
 affects = ""
 
 [view-transition-class]
@@ -2456,7 +2466,7 @@ allow_quirks = true
 parse_method = "parse_size_for_width_or_height"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://drafts.csswg.org/css-box/#propdef-width"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -2547,7 +2557,7 @@ affects = "layout"
 type = "HyphenateLimitChars"
 initial = "computed::HyphenateLimitChars::auto()"
 struct = "inherited_text"
-engine = "gecko"
+servo_pref = "layout.css.hyphens.enabled"
 spec = "https://drafts.csswg.org/css-text-4/#hyphenate-char-limits"
 affects = "layout"
 boxed = true
@@ -2587,6 +2597,16 @@ animation_type = "discrete"
 gecko_pref = "layout.css.text-autospace.enabled"
 has_effect_on_gecko_scrollbars = false
 spec = "https://drafts.csswg.org/css-text-4/#text-autospace-property"
+affects = "layout"
+
+[text-autospace-size]
+type = "Number"
+initial = "0.125"
+struct = "inherited_text"
+engine = "gecko"
+gecko_pref = "layout.css.text-autospace-size.enabled"
+has_effect_on_gecko_scrollbars = false
+spec = "https://github.com/w3c/csswg-drafts/issues/8510#issuecomment-6438888621"
 affects = "layout"
 
 [text-box-edge]
@@ -2651,7 +2671,6 @@ affects = "overflow"
 type = "LengthPercentageOrAuto"
 initial = "computed::LengthPercentageOrAuto::auto()"
 struct = "inherited_text"
-servo_pref = "layout.css.text-underline.enabled"
 spec = "https://drafts.csswg.org/css-text-decor-4/#underline-offset"
 servo_restyle_damage = "rebuild_stacking_context"
 affects = "overflow"
@@ -2660,7 +2679,7 @@ affects = "overflow"
 type = "TextUnderlinePosition"
 initial = "computed::TextUnderlinePosition::AUTO"
 struct = "inherited_text"
-servo_pref = "layout.css.text-underline.enabled"
+servo_pref = "layout.css.text-underline-position.enabled"
 animation_type = "discrete"
 spec = "https://drafts.csswg.org/css-text-decor-3/#text-underline-position-property"
 servo_restyle_damage = "rebuild_stacking_context"
@@ -3263,7 +3282,7 @@ logical_group = "margin"
 gecko_ffi_name = "mMargin.0"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://drafts.csswg.org/css-box/#propdef-margin-top"
-rule_types_allowed = ["style", "keyframe", "page", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "page", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -3276,7 +3295,7 @@ logical_group = "margin"
 gecko_ffi_name = "mMargin.1"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://drafts.csswg.org/css-box/#propdef-margin-right"
-rule_types_allowed = ["style", "keyframe", "page", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "page", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -3289,7 +3308,7 @@ logical_group = "margin"
 gecko_ffi_name = "mMargin.2"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://drafts.csswg.org/css-box/#propdef-margin-bottom"
-rule_types_allowed = ["style", "keyframe", "page", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "page", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -3302,7 +3321,7 @@ logical_group = "margin"
 gecko_ffi_name = "mMargin.3"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://drafts.csswg.org/css-box/#propdef-margin-left"
-rule_types_allowed = ["style", "keyframe", "page", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "page", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -3315,7 +3334,7 @@ logical_group = "margin"
 gecko_ffi_name = "mMargin.4"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-margin-block-start"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -3328,7 +3347,7 @@ logical_group = "margin"
 gecko_ffi_name = "mMargin.5"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-margin-block-end"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -3342,7 +3361,7 @@ logical_group = "margin"
 gecko_ffi_name = "mMargin.6"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-margin-inline-start"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 
@@ -3356,7 +3375,7 @@ logical_group = "margin"
 gecko_ffi_name = "mMargin.7"
 flags = "SCROLL_LINKED_EFFECTIVE"
 spec = "https://drafts.csswg.org/css-logical-props/#propdef-margin-inline-end"
-rule_types_allowed = ["style", "keyframe", "scope", "position-try"]
+rule_types_allowed = ["style", "keyframe", "position-try"]
 servo_restyle_damage = "rebuild_box"
 affects = "layout"
 

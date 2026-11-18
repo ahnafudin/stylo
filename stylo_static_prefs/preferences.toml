@@ -2,6 +2,7 @@
 "dom.viewTransitions.cross-document.enabled" = false
 "gfx.font_rendering.opentype_svg.enabled" = false
 "layout.css.alpha-color-function.enabled" = true
+"layout.css.always_underline_links" = false
 "layout.css.anchor-positioning.enabled" = false
 "layout.css.appearance-base.enabled" = false
 "layout.css.appearance.enabled" = false
@@ -76,9 +77,10 @@
 "layout.css.text-emphasis.enabled" = false
 "layout.css.text-indent-keywords.enabled" = false
 "layout.css.text-overflow.enabled" = false
-"layout.css.text-underline.enabled" = false
+"layout.css.text-underline-position.enabled" = false
 "layout.css.text-wrap-style.balance.enabled" = false
 "layout.css.text-wrap-style.pretty.enabled" = false
+"layout.css.transitions-override-ua" = false
 "layout.css.tree-counting-functions.enabled" = false
 "layout.css.view-transitions.enabled" = false
 "layout.css.webkit-fill-available.all-size-properties.enabled" = true
